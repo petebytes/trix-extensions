@@ -1,8 +1,14 @@
 trix-toolbar {
   .trix-button--icon-horizontal-rule::before { background-image: image-url("trix_horizontal_rule.svg"); }
   .trix-button--icon-color::before { background-image: image-url("trix_color.svg"); }
+  .trix-button--icon-align-center::before { background-image: image-url("trix_align_center.svg"); }
+  .trix-button--icon-align-left::before { background-image: image-url("trix_align_left.svg"); }
+  .trix-button--icon-align-right::before { background-image: image-url("trix_align_right.svg"); }
+  // .trix-button--icon-align-justify::before { background-image: image-url("trix_align_justify.svg"); }
 
   .trix-dialog--heading { max-width: 180px; }
+
+  .trix-dialog--alignment { max-width: 145px; }
 
   .trix-dialog--color {
     max-width: 265px;

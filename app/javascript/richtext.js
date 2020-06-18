@@ -3,6 +3,7 @@ import Trix from "trix"
 addHeadingAttributes()
 addForegroundColorAttributes()
 addBackgroundColorAttributes()
+addAlignmentAttributes()
 
 addEventListener("trix-initialize", function (event) {
     new RichText(event.target)
@@ -27,6 +28,7 @@ class RichText {
     this.insertHeadingElements()
     this.insertDividerElements()
     this.insertColorElements()
+    this.insertAlignmentElements()
   }
 
   insertHeadingElements() {
@@ -64,6 +66,19 @@ class RichText {
     this.dialogsElement.insertAdjacentHTML("beforeend", this.dialogColorTemplate)
   }
 
+  insertAlignmentElements() {
+    this.insertAlignmentButton()
+    this.insertDialogAlignment()
+  }
+
+  insertAlignmentButton() {
+    this.buttonGroupTextTools.insertAdjacentHTML("beforeend", this.alignmentButtonTemplate)
+  }
+
+  insertDialogAlignment() {
+    this.dialogsElement.insertAdjacentHTML("beforeend", this.dialogAlignmentTemplate)
+  }
+
   get buttonGroupBlockTools() {
     return this.toolbarElement.querySelector("[data-trix-button-group=block-tools]")
   }
@@ -98,6 +113,10 @@ class RichText {
 
   get colorButtonTemplate() {
     return '<button type="button" class="trix-button trix-button--icon trix-button--icon-color" data-trix-action="x-color" title="Color" tabindex="-1">Color</button>'
+  }
+
+  get alignmentButtonTemplate() {
+    return '<button type="button" class="trix-button trix-button--icon trix-button--icon-align-center" data-trix-action="x-alignment" title="Alignment" tabindex="-1">Alignment</button>'
   }
 
   get dialogHeadingTemplate() {
@@ -149,6 +168,22 @@ class RichText {
       </div>
     `
   }
+
+  get dialogAlignmentTemplate() {
+    return `
+      <div class="trix-dialog trix-dialog--alignment" data-trix-dialog="x-alignment" data-trix-dialog-attribute="x-alignment">
+        <div class="trix-dialog__link-fields">
+          <input type="text" name="x-alignment" class="trix-dialog-hidden__input" data-trix-input>
+          <div class="trix-button-group">
+            <button type="button" class="trix-button trix-button--dialog" data-trix-attribute="left">Left</button>
+            <button type="button" class="trix-button trix-button--dialog" data-trix-attribute="center">Center</button>
+            <button type="button" class="trix-button trix-button--dialog" data-trix-attribute="right">Right</button>
+          </div>
+        </div>
+      </div>
+    `
+  }
+
 }
 
 function addHeadingAttributes() {
@@ -166,5 +201,18 @@ function addForegroundColorAttributes() {
 function addBackgroundColorAttributes() {
   Array.from(["rgb(250, 247, 133)", "rgb(255, 240, 219)", "rgb(255, 229, 229)", "rgb(255, 228, 247)", "rgb(242, 237, 255)", "rgb(225, 239, 252)", "rgb(228, 248, 226)", "rgb(238, 226, 215)", "rgb(242, 242, 242)"]).forEach((color, i) => {
     Trix.config.textAttributes[`bgColor${(i + 1)}`] = { style: { backgroundColor: color }, inheritable: true, parser: e => e.style.backgroundColor == color }
+  })
+}
+
+function addAlignmentAttributes() {
+  Array.from(["left", "center", "right"]).forEach((alignment, i) => {
+    Trix.config.textAttributes[alignment] = {
+      breakOnReturn: true,
+      group: false,
+      tagName: "div",
+      style: {textAlign: alignment},
+      terminal: true,
+      inheritable: true
+    }
   })
 }
